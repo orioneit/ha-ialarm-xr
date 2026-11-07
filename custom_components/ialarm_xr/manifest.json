@@ -1,0 +1,12 @@
+{
+  "domain": "ialarm_xr",
+  "name": "iAlarm-XR (cloud)",
+  "codeowners": ["@orioneit"],
+  "config_flow": true,
+  "documentation": "https://github.com/orioneit/ha-ialarm-xr",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/orioneit/ha-ialarm-xr/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

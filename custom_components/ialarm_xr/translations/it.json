@@ -1,0 +1,60 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iAlarm-XR (cloud)",
+        "description": "Inserisci ID e password della centrale presi dall'app iAlarm (non quelli del tuo account) e l'indirizzo del server cloud, che trovi nelle impostazioni dell'app iAlarm o nei manuali ufficiali. Ti consigliamo vivamente di cambiare la password di fabbrica della centrale.",
+        "data": {
+          "name": "Nome",
+          "device_id": "ID centrale",
+          "password": "Password centrale",
+          "host": "Server cloud",
+          "port": "Porta"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Nuova autenticazione",
+        "description": "La password della centrale è stata rifiutata. Inserisci quella nuova.",
+        "data": {
+          "password": "Password centrale"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "ID o password della centrale rifiutati dal cloud",
+      "cannot_connect": "Impossibile raggiungere il cloud iAlarm",
+      "unknown": "Errore imprevisto"
+    },
+    "abort": {
+      "already_configured": "Questa centrale è già configurata",
+      "reauth_successful": "Password aggiornata"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni",
+        "data": {
+          "scan_interval": "Intervallo di aggiornamento (secondi)",
+          "pin": "PIN richiesto per disinserire da Home Assistant (vuoto = nessuno)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "zone_alarm": {
+        "name": "{zone} allarme"
+      },
+      "zone_low_battery": {
+        "name": "{zone} batteria"
+      },
+      "zone_lost": {
+        "name": "{zone} segnale perso"
+      },
+      "zone_bypass": {
+        "name": "{zone} esclusa"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iAlarm-XR (cloud)",
+        "description": "Enter the panel ID and panel password from the iAlarm app (not your app account) and the cloud server address, which you can find in the iAlarm app settings or in the official manuals. We strongly recommend changing the factory default panel password.",
+        "data": {
+          "name": "Name",
+          "device_id": "Panel ID",
+          "password": "Panel password",
+          "host": "Cloud server",
+          "port": "Port"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "The panel password was rejected. Enter the new panel password.",
+        "data": {
+          "password": "Panel password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Panel ID or password rejected by the cloud",
+      "cannot_connect": "Cannot reach the iAlarm cloud",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This panel is already configured",
+      "reauth_successful": "Password updated"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "scan_interval": "Polling interval (seconds)",
+          "pin": "PIN required to disarm from Home Assistant (empty = none)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "zone_alarm": {
+        "name": "{zone} alarm"
+      },
+      "zone_low_battery": {
+        "name": "{zone} battery"
+      },
+      "zone_lost": {
+        "name": "{zone} signal lost"
+      },
+      "zone_bypass": {
+        "name": "{zone} bypass"
+      }
+    }
+  }
+}
