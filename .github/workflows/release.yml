@@ -1,9 +1,14 @@
 name: Release
 
+# Creates the tag and GitHub release when the manifest version on main changes.
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+    paths:
+      - custom_components/ialarm_xr/manifest.json
+      - CHANGELOG.md
+      - .github/workflows/release.yml
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,14 +18,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check manifest version matches tag
+      - name: Read version
+        id: version
         run: |
           version=$(python3 -c "import json; print(json.load(open('custom_components/ialarm_xr/manifest.json'))['version'])")
-          test "v$version" = "$GITHUB_REF_NAME" || { echo "manifest version $version does not match tag $GITHUB_REF_NAME"; exit 1; }
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "Release v$version already exists, nothing to do"
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Extract release notes from CHANGELOG.md
+        if: steps.version.outputs.exists != 'true'
         run: |
-          awk -v v="## ${GITHUB_REF_NAME#v}" '$0==v{f=1;next} /^## /{f=0} f' CHANGELOG.md > notes.md
-          test -s notes.md || { echo "No CHANGELOG.md section for $GITHUB_REF_NAME"; exit 1; }
+          tag=${{ steps.version.outputs.tag }}
+          awk -v v="## ${tag#v}" '$0==v{f=1;next} /^## /{f=0} f' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "No CHANGELOG.md section for $tag"; exit 1; }
       - uses: softprops/action-gh-release@v2
+        if: steps.version.outputs.exists != 'true'
         with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           body_path: notes.md
