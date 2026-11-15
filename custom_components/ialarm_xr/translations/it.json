@@ -46,6 +46,9 @@
       "zone_alarm": {
         "name": "{zone} allarme"
       },
+      "zone_open": {
+        "name": "{zone} contatto"
+      },
       "zone_low_battery": {
         "name": "{zone} batteria"
       },

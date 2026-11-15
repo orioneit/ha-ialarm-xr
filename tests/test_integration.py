@@ -51,12 +51,14 @@ async def test_entities(hass: HomeAssistant, cloud) -> None:
     assert hass.states.get("alarm_control_panel.casa_mamma").state == "disarmed"
     assert hass.states.get("binary_sensor.casa_mamma_cucinapersiana_battery").state == "on"
     assert hass.states.get("binary_sensor.casa_mamma_portone_alarm").state == "off"
+    assert hass.states.get("binary_sensor.casa_mamma_portone_contact").state == "off"
+    assert hass.states.get("binary_sensor.casa_mamma_portone_alarm").attributes["zone_status_raw"] == 1
     reg = er.async_get(hass)
     # Disabled panel zones are created but disabled in HA
     tunnel = reg.async_get("binary_sensor.casa_mamma_tunnel_pir_alarm")
     assert tunnel is not None and tunnel.disabled_by is not None
     # Unnamed zones are not created
-    assert len([e for e in reg.entities.values() if e.platform == DOMAIN and e.domain == "binary_sensor"]) == 10 * 4
+    assert len([e for e in reg.entities.values() if e.platform == DOMAIN and e.domain == "binary_sensor"]) == 10 * 5
 
 
 async def test_arm_disarm(hass: HomeAssistant, cloud) -> None:
@@ -90,3 +92,14 @@ async def test_pin(hass: HomeAssistant, cloud) -> None:
                                    {"entity_id": "alarm_control_panel.casa_mamma", "code": "4321"},
                                    blocking=True)
     assert cloud.commands == ["DISARM"]
+
+
+async def test_open_contact(hass: HomeAssistant, cloud) -> None:
+    await _setup(hass, cloud)
+    cloud.zone_raw[1] = 9  # in use + fault bit: contact open
+    await hass.config_entries.async_entries(DOMAIN)[0].runtime_data.async_refresh()
+    await hass.async_block_till_done()
+    state = hass.states.get("binary_sensor.casa_mamma_portone_contact")
+    assert state.state == "on"
+    assert state.attributes["device_class"] == "opening"
+    assert hass.states.get("binary_sensor.casa_mamma_portone_alarm").state == "off"

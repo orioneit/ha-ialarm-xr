@@ -37,7 +37,7 @@ _COMMANDS = {
 ZONE_IN_USE = 1
 ZONE_ALARM = 2
 ZONE_BYPASS = 4
-ZONE_FAULT = 8
+ZONE_FAULT = 8  # zone not at rest: open contact when "magnet check" is enabled
 ZONE_LOW_BATTERY = 16
 ZONE_LOST = 32
 
@@ -78,6 +78,11 @@ class Zone:
 
     @property
     def fault(self) -> bool | None:
+        return self._bit(ZONE_FAULT)
+
+    @property
+    def open(self) -> bool | None:
+        """Contact open (reported only with the panel's magnet check enabled)."""
         return self._bit(ZONE_FAULT)
 
     @property

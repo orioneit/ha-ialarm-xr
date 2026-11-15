@@ -19,10 +19,13 @@ It connects through the iAlarm cloud, like the mobile app.
 
 - Alarm control panel: arm away, arm home (partial), disarm; shows triggered.
 - Optional PIN to disarm from Home Assistant.
-- Per zone: alarm, low battery, signal lost and bypass (disabled by default) sensors.
+- Per zone: contact open/closed, alarm, low battery, signal lost and bypass (disabled by default) sensors.
 
-**Limitations:** door/window open-closed state is not reported by the panel;
-state is polled every 30 s (configurable); requires Internet.
+**Contact open/closed** requires *Magnet check* ("Controllo Magneti") to be enabled
+in the iAlarm app; otherwise the contact sensors always read closed. Each zone sensor
+also exposes the raw panel status as the `zone_status_raw` attribute.
+
+**Limitations:** state is polled every 30 s (configurable); requires Internet.
 
 ## Installation
 
@@ -56,9 +59,13 @@ dall'integrazione iAlarm ufficiale. Si collega tramite il cloud iAlarm, come l'a
 > Ti consigliamo vivamente di cambiare la password di fabbrica della centrale dall'app iAlarm.
 
 **Funzioni:** pannello d'allarme (totale, parziale, disinserito, scattato), PIN opzionale
-per disinserire, e per ogni zona sensori di allarme, batteria scarica, segnale perso ed esclusione.
+per disinserire, e per ogni zona sensori di contatto aperto/chiuso, allarme, batteria scarica,
+segnale perso ed esclusione.
 
-**Limiti:** la centrale non comunica porte/finestre aperte; aggiornamento ogni 30 s
+**Contatto aperto/chiuso:** richiede che nell'app iAlarm sia attivo *Controllo Magneti*,
+altrimenti i sensori di contatto risultano sempre chiusi.
+
+**Limiti:** aggiornamento ogni 30 s
 (configurabile); serve Internet.
 
 **Installazione:** HACS → *Repository personalizzati* → `https://github.com/orioneit/ha-ialarm-xr`

@@ -32,6 +32,12 @@ DESCRIPTIONS: tuple[ZoneSensorDescription, ...] = (
         value_fn=lambda z: z.alarm,
     ),
     ZoneSensorDescription(
+        key="open",
+        translation_key="zone_open",
+        device_class=BinarySensorDeviceClass.OPENING,
+        value_fn=lambda z: z.open,
+    ),
+    ZoneSensorDescription(
         key="low_battery",
         translation_key="zone_low_battery",
         device_class=BinarySensorDeviceClass.BATTERY,
@@ -93,4 +99,9 @@ class ZoneBinarySensor(IAlarmEntity, BinarySensorEntity):
         zone = self.coordinator.data.zones.get(self._zone)
         if zone is None:
             return {}
-        return {"zone": zone.number, "zone_type": zone.type, "zone_enabled": zone.enabled}
+        return {
+            "zone": zone.number,
+            "zone_type": zone.type,
+            "zone_enabled": zone.enabled,
+            "zone_status_raw": zone.raw,
+        }
